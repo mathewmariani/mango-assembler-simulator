@@ -1,6 +1,25 @@
-export type InterpreterValue = { type: string, value: number | number[] | string } | undefined;
+import { InstructionType } from "./instructions";
 
-export default class Interpreter {
+export enum InterpreterGroupings {
+  Label = 1,
+  Instruction = 2,
+  Operand1 = 3,
+  Operand2 = 4,
+  Comment = 5,
+};
+
+export enum InterpreterType {
+  Number = 1,
+  Char = 2,
+  String = 3,
+  Address = 4,
+  Register = 5,
+  RegAddress = 6,
+};
+
+export type InterpreterValue = { type: InterpreterType, value: number | number[] | string } | undefined;
+
+export class Interpreter {
   // regexes
   static readonly regexLabel: RegExp = /(?:([A-Za-z]\w*)[:])/
   static readonly regexinstruction: RegExp = /(?:(\w*))/
@@ -55,13 +74,10 @@ export default class Interpreter {
       throw "Invalid number format " + input
     }
 
-    // parse back into an integer to check size
-    const int = parseInt(value, 10)
-
     // NOTE: two's compliment will mess this up
     // MIN_INT: -128
     // MAX_INT:  127
-    if (int < 0 || int > 255) {
+    if (value < 0 || value > 255) {
       throw "This number is too damn high!"
     }
 
@@ -98,14 +114,14 @@ export default class Interpreter {
       let addr = input.slice(1, input.length - 1)
       let regaddress = this.parseRegister(addr)
       if (regaddress !== undefined) {
-        return { type: "regaddress", value: regaddress }
+        return { type: InterpreterType.RegAddress, value: regaddress }
       } else {
         let label = this.parseLabel(addr)
         if (label !== undefined) {
-          return { type: "address", value: label }
+          return { type: InterpreterType.Address, value: label }
         } else {
           let number = this.parseNumber(addr) 
-          return { type: "address", value: number }
+          return { type: InterpreterType.Address, value: number }
         }
       }
     case '"': // "string"
@@ -114,31 +130,31 @@ export default class Interpreter {
       for (let i = 0, l = str.length; i < l; ++i) {
         chars.push(str.charCodeAt(i))
       }
-      return { type: "string", value: chars }
+      return { type: InterpreterType.String, value: chars }
     case '\'': // 'c'
       let char = input.slice(1, input.length - 1)
       if (char.length > 1) {
         throw new Error("Character constant too long.")
       }
-      return { type: "char", value: char.charCodeAt(0) }
+      return { type: InterpreterType.Char, value: char.charCodeAt(0) }
     default:
       // register, number, label
       let register = this.parseRegister(input)
       if (register !== undefined) {
-        return { type: "register", value: register }
+        return { type: InterpreterType.Register, value: register }
       } else {
         let label = this.parseLabel(input)
       if (label !== undefined) {
-        return { type: "number", value: label }
+        return { type: InterpreterType.Number, value: label }
       } else {
         let number = this.parseNumber(input) 
-        return { type: "number", value: number }
+        return { type: InterpreterType.Number, value: number }
         }
       }
     }
   }
   
-  static getArguments(instruction, operand1: string, operand2: string | undefined): [InterpreterValue, InterpreterValue] {
+  static getArguments(instruction: InstructionType, operand1: string | undefined, operand2: string | undefined): [InterpreterValue, InterpreterValue] {
     let p1: InterpreterValue;
     let p2: InterpreterValue;
     if (instruction !== undefined) {
@@ -146,24 +162,21 @@ export default class Interpreter {
         if (operand1 !== undefined && operand2 === undefined) {
           p1 = this.getValue(operand1)
         } else {
-          // TODO: throw better error
           // this is a unary instruction and expects one argument
-          throw new Error("Too many instructions")
+          throw new Error("Too many instructions. This is a unary instruction, and expects one argument.")
         }
       } else if (!instruction.unary && instruction.binary) {
         if (operand1 !== undefined && operand2 !== undefined) {
           p1 = this.getValue(operand1)
           p2 = this.getValue(operand2)
         } else {
-          // TODO: throw better error
           // this is a binary instruction and expects two arguments
-          throw new Error("Too few instructions")
+          throw new Error("Too few instructions. This is a binary instruction, and expects two arguments.")
         }
-        } else if (!instruction.unary && !instruction.binary) {
+      } else if (!instruction.unary && !instruction.binary) {
         if (operand1 !== undefined || operand2 !== undefined) {
-          // FIXME: throw better error
-          // this instruction and expects no arguments
-          throw new Error("Too many instructions")
+          // this instruction expects no arguments
+          throw new Error("Too many instructions. This instruction expects no arguments")
         }
       }
     }

@@ -1,4 +1,4 @@
-import ALU from './alu.ts'
+import { ALU, ALUOperationFunction } from './alu.ts'
 import Memory from './memory.ts'
 import { Opcodes } from './opcodes.ts'
 
@@ -165,7 +165,7 @@ export default class CPU {
     // FIXME: 
   }
 
-  private perform_operation(fn: (lhs: number, rhs: number) => any, lhs: number, rhs: number): number {
+  private perform_operation(fn: ALUOperationFunction, lhs: number, rhs: number): number {
     // execute
     const result = fn(lhs, rhs)
     this.zero = result.is_zero
@@ -1320,7 +1320,7 @@ export default class CPU {
       // GPR[MBR] ← ~GPR[MBR]
 
       this.fetch_addr_operand()
-      this.gpr[this.mbr] = this.perform_operation(ALU.not, this.gpr[this.mbr])
+      this.gpr[this.mbr] = this.perform_operation(ALU.not, this.gpr[this.mbr], 0)
       ++this.pc
       break
 

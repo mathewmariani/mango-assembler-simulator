@@ -1,5 +1,5 @@
 import { test, expect, describe } from "bun:test"
-import ALU from "../src/emulator/alu.ts"
+import { ALU } from "../src/emulator/alu.ts"
 
 //
 // These tests validate that the `ALU` can do arithmatic.

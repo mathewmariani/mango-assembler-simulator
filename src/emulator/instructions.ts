@@ -1,4 +1,6 @@
-export default {
+export type InstructionType = { unary: boolean, binary: boolean }
+
+export const InstructionSet: Record<string, InstructionType> = {
   // pseudo-instructions
   "DB": { unary: true, binary: false },
   

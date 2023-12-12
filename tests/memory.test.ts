@@ -2,7 +2,7 @@ import { test, expect, describe, beforeEach } from "bun:test"
 import Memory from "../src/emulator/memory.ts"
 
 //
-// These tests validate that the `Memory` can be written and read from.
+// These tests validate that the `Memory` can be read from, and written to.
 //
 
 describe('Memory', () => {

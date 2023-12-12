@@ -2,7 +2,7 @@ import { test, expect, describe } from "bun:test"
 import { Opcodes } from "../src/emulator/opcodes.ts"
 
 //
-// These tests assure that the `Opcode` haven't been changed.
+// These tests assure that the `Opcodes` haven't been changed.
 //
 
 describe('Opcode', () => {

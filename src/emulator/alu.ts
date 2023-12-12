@@ -1,4 +1,4 @@
-type ALUResult = {
+export type ALUResult = {
   sum: number
   is_zero: boolean
   is_carry: boolean
@@ -6,7 +6,9 @@ type ALUResult = {
   is_negative: boolean
 }
 
-export default class ALU {
+export type ALUOperationFunction = (lhs: number, rhs: number) => ALUResult
+
+export class ALU {
   private static is_zero(sum: number): boolean {
     return (sum === 0) ? true : false
   }
@@ -20,8 +22,8 @@ export default class ALU {
     return ((sum & 0x80) === 0x80)
   }
 
-  static not(lhs: number): ALUResult {
-    const sum = ((~lhs) & 0xFF)
+  static not(value: number): ALUResult {
+    const sum = ((~value) & 0xFF)
     return {
       sum: sum,
       is_zero: ALU.is_zero(sum),

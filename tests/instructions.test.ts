@@ -3,7 +3,7 @@ import Assembler from "../src/emulator/assembler.ts"
 import { Opcodes } from "../src/emulator/opcodes.ts"
 
 //
-// These tests validate that the `Assembler` can assemble instructions.
+// These tests validate that the `Assembler` can assemble instructions into bytecode.
 //
 
 describe('Instructions', () => {
