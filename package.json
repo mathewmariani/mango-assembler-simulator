@@ -1,0 +1,14 @@
+{
+  "name": "mango",
+  "devDependencies": {
+    "@vue/runtime-dom": "^3.3.11",
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "vue": "^3.3.11"
+  }
+}
