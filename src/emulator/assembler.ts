@@ -1,5 +1,5 @@
 import { Opcodes } from './opcodes.ts'
-import { Interpreter, InterpreterGroupings, InterpreterType } from './interpreter.ts'
+import { Interpreter, InterpreterGroupings } from './interpreter.ts'
 import { InstructionSet } from './instructions.ts'
 
 export default class Assembler {
@@ -75,11 +75,11 @@ export default class Assembler {
         case 'DB':
           // FIXME: this might cause some issues
           // InterpreterType.Number, InterpreterType.Char, InterpreterType.String
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             this.code.push(p1.value)
-          } else if (p1.type === InterpreterType.Char) {
+          } else if (Interpreter.isChar(p1)) {
             this.code.push(p1.value)
-          } else if (p1.type === InterpreterType.String) {
+          } else if (Interpreter.isString(p1)) {
             for (let j = 0, k = p1.value.length; j < k; ++j) {
               this.code.push(p1.value[j])
             }
@@ -98,21 +98,21 @@ export default class Assembler {
           break
         // move instructions
         case 'MOV':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.MOV_REG_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.MOV_ADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.MOV_REGADDR_TO_REG
-          } else if (p1.type === InterpreterType.Address && p2.type === InterpreterType.Register) {
+          } else if (Interpreter.isAddress(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.MOV_REG_TO_ADDR
-          } else if (p1.type === InterpreterType.RegAddress && p2.type === InterpreterType.Register) {
+          } else if (Interpreter.isRegAddress(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.MOV_REG_TO_REGADDR
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.MOV_NUM_TO_REG
-          } else if (p1.type === InterpreterType.Address && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isAddress(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.MOV_NUM_TO_ADDR
-          } else if (p1.type === InterpreterType.RegAddress && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegAddress(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.MOV_NUM_TO_REGADDR
           } else {
             throw new Error("MOV does not support this operands")
@@ -124,13 +124,13 @@ export default class Assembler {
         // MULT
         // DIV
         case 'ADD':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.ADD_REG_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.ADD_ADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.ADD_REGADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.ADD_NUM_TO_REG
           } else {
             throw new Error("ADD does not support this operands")
@@ -139,13 +139,13 @@ export default class Assembler {
           this.code.push(opcode, p1.value, p2.value)
           break
         case 'SUBT':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.SUBT_REG_FROM_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.SUBT_ADDR_FROM_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.SUBT_REGADDR_FROM_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.SUBT_NUM_FROM_REG
           } else {
             throw new Error("SUBT does not support this operands")
@@ -154,7 +154,7 @@ export default class Assembler {
           this.code.push(opcode, p1.value, p2.value)
           break
         case 'INC':
-          if (p1.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1)) {
             opcode = Opcodes.INC_REG
           } else {
             throw "INC does not support this operand"
@@ -163,7 +163,7 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         case 'DEC':
-          if (p1.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1)) {
             opcode = Opcodes.DEC_REG
           } else {
             throw "DEC does not support this operand"
@@ -173,13 +173,13 @@ export default class Assembler {
           break
         // comparison instructions
         case 'CMP':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.CMP_REG_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.CMP_ADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.CMP_REGADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.CMP_NUM_TO_REG
           } else {
             throw new Error("CMP does not support this operands")
@@ -189,9 +189,9 @@ export default class Assembler {
           break
         // jump instruction
         case 'JMP':
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.JMP_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.JMP_REGADDR
           } else {
             throw new Error("JMP does not support this operand")
@@ -200,9 +200,9 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         case 'JC':
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.JC_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.JC_REGADDR
           } else {
             throw new Error("JC does not support this operand")
@@ -211,9 +211,9 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         case 'JNC':
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.JNC_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.JNC_REGADDR
           } else {
             throw new Error("JNC does not support this operand")
@@ -222,9 +222,9 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         case 'JZ':
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.JZ_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.JZ_REGADDR
           } else {
             throw new Error("JZ does not support this operand")
@@ -233,9 +233,9 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         case 'JNZ':
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.JNZ_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.JNZ_REGADDR
           } else {
             throw new Error("JNZ does not support this operand")
@@ -244,9 +244,9 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         case 'JA':
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.JA_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.JA_REGADDR
           } else {
             throw new Error("JA does not support this operand")
@@ -255,9 +255,9 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         case 'JNA':
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.JNA_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.JNA_REGADDR
           } else {
             throw new Error("JNA does not support this operand")
@@ -267,13 +267,13 @@ export default class Assembler {
           break
         // stack instructions
         case 'PUSH':
-          if (p1.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1)) {
             opcode = Opcodes.PUSH_REG
-          } else if (p1.type === InterpreterType.Address) {
+          } else if (Interpreter.isAddress(p1)) {
             opcode = Opcodes.PUSH_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.PUSH_REGADDR
-          } else if (p1.type === InterpreterType.Number) {
+          } else if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.PUSH_NUM
           } else {
             throw new Error("PUSH does not support this operands")
@@ -282,7 +282,7 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         case 'POP':
-          if (p1.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1)) {
             opcode = Opcodes.POP_REG
           } else {
             throw new Error("POP does not support this operands")
@@ -292,9 +292,9 @@ export default class Assembler {
           break
         // subroutine instructions
         case 'CALL':
-          if (p1.type === InterpreterType.Number) {
+          if (Interpreter.isNumber(p1)) {
             opcode = Opcodes.CALL_ADDR
-          } else if (p1.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegAddress(p1)) {
             opcode = Opcodes.CALL_REGADDR
           } else {
             throw new Error("CALL does not support this operands")
@@ -308,13 +308,13 @@ export default class Assembler {
           break
         // binary instructions
         case 'AND':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.AND_REG_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.AND_ADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.AND_REGADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.AND_NUM_TO_REG
           } else {
             throw new Error("AND does not support this operands")
@@ -323,13 +323,13 @@ export default class Assembler {
           this.code.push(opcode, p1.value, p2.value)
           break
         case 'OR':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.OR_REG_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.OR_ADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.OR_REGADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.OR_NUM_TO_REG
           } else {
             throw new Error("OR does not support this operands")
@@ -338,13 +338,13 @@ export default class Assembler {
           this.code.push(opcode, p1.value, p2.value)
           break
         case 'XOR':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.XOR_REG_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.XOR_ADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.XOR_REGADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.XOR_NUM_TO_REG
           } else {
             throw new Error("XOR does not support this operands")
@@ -353,13 +353,13 @@ export default class Assembler {
           this.code.push(opcode, p1.value, p2.value)
           break
         case 'SHL':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.SHL_REG_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.SHL_ADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.SHL_REGADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.SHL_NUM_TO_REG
           } else {
             throw new Error("SHL does not support this operands")
@@ -368,13 +368,13 @@ export default class Assembler {
           this.code.push(opcode, p1.value, p2.value)
           break
         case 'SHR':
-          if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
             opcode = Opcodes.SHR_REG_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Address) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
             opcode = Opcodes.SHR_ADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.RegAddress) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
             opcode = Opcodes.SHR_REGADDR_TO_REG
-          } else if (p1.type === InterpreterType.Register && p2.type === InterpreterType.Number) {
+          } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
             opcode = Opcodes.SHR_NUM_TO_REG
           } else {
             throw new Error("SHR does not support this operands")
@@ -383,7 +383,7 @@ export default class Assembler {
           this.code.push(opcode, p1.value, p2.value)
           break
         case 'NOT':
-          if (p1.type === InterpreterType.Register) {
+          if (Interpreter.isRegister(p1)) {
             opcode = Opcodes.NOT_REG
           } else {
             throw new Error("NOT does not support this operands")

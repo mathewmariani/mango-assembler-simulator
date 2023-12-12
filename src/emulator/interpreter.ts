@@ -39,6 +39,29 @@ export class Interpreter {
   // FIXME: I dont like this giant regex
   static readonly regex: RegExp = /^\s*(?:([A-Za-z]\w*)[:])?\s*(?:(\w*))?\s*(?:(\[(?:\w+(?:[\+|-]\d+)?)\]|\".+?\"|\'.+?\'|[$A-Za-z0-9]\w*))?\s*(?:[,]\s*(\[(\w+((\+|-)\d+)?)\]|\".+?\"|\'.+?\'|[$A-Za-z0-9]\w*))?/
 
+  static isNumber(token: InterpreterValue) {
+    return token?.type == InterpreterType.Number
+  }
+
+  static isChar(token: InterpreterValue) {
+    return token?.type == InterpreterType.Char
+  }
+
+  static isString(token: InterpreterValue) {
+    return token?.type == InterpreterType.String
+  }
+
+  static isAddress(token: InterpreterValue) {
+    return token?.type == InterpreterType.Address
+  }
+
+  static isRegister(token: InterpreterValue) {
+    return token?.type == InterpreterType.Register
+  }
+
+  static isRegAddress(token: InterpreterValue) {
+    return token?.type == InterpreterType.RegAddress
+  }
 
   static interpretLine(line: string) {
     return this.regex.exec(line)
