@@ -1258,7 +1258,7 @@ describe('Programs', () => {
   test('should underflow memory', () => {
     const str = `
       MOV A, 0x0
-      MOV B, B
+      MOV B, 0x5
       SUBT A, B
       HLT`
 
@@ -1292,15 +1292,17 @@ describe('Programs', () => {
 
     expect(cpu.pc).toBe(0x5)
   })
-  // test('should JMP to address from label', () => {
-  //   const str = `
-  //     JMP start
-  //     start:
-  //     HLT`
-  //   assemble(str)
-  //   execute()
-  //   expect(cpu.pc).toBe(0x2)
-  // })
+  test('should JMP to address from label', () => {
+    const str = `
+      JMP start
+      HLT
+      start:`
+
+    assemble(str)
+    execute()
+
+    expect(cpu.pc).toBe(0x3)
+  })
   test('should write to stack pointer', () => {
     const str = `
       PUSH 0x5
