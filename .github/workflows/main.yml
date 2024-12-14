@@ -1,16 +1,19 @@
+name: Test
+
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build-and-start:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: oven-sh/setup-bun@v1
-        with:
-            bun-version: latest
-      - run: bun install
-      - run: bun test
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Install Packages 📦
+        run: npm ci
+
+      - name: Run Tests 🔧
+        run: npm test

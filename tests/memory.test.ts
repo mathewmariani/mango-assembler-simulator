@@ -1,5 +1,5 @@
-import { test, expect, describe, beforeEach } from "bun:test"
-import Memory from "../src/emulator/memory.ts"
+import { test, expect, describe, beforeEach } from "@jest/globals"
+import Memory from "../src/emulator/memory"
 
 //
 // These tests validate that the `Memory` can be read from, and written to.

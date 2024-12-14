@@ -1,5 +1,5 @@
-import { test, expect, describe } from "bun:test"
-import { Opcodes } from "../src/emulator/opcodes.ts"
+import { test, expect, describe } from "@jest/globals"
+import { Opcodes } from "../src/emulator/opcodes"
 
 //
 // These tests assure that the `Opcodes` haven't been changed.

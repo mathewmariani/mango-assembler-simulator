@@ -1,7 +1,7 @@
-import { test, expect, describe, beforeEach } from "bun:test"
-import Assembler from "../src/emulator/assembler.ts"
-import CPU from "../src/emulator/cpu.ts"
-import Memory from "../src/emulator/memory.ts"
+import { test, expect, describe, beforeEach } from "@jest/globals"
+import Assembler from "../src/emulator/assembler"
+import CPU from "../src/emulator/cpu"
+import Memory from "../src/emulator/memory"
 
 //
 // These tests validate that `Mango` can excute simple programs.

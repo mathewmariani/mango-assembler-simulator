@@ -1,7 +1,7 @@
-import { test, expect, describe, beforeEach } from "bun:test"
-import CPU from "../src/emulator/cpu.ts"
-import Memory from "../src/emulator/memory.ts"
-import { Opcodes } from "../src/emulator/opcodes.ts"
+import { test, expect, describe, beforeEach } from "@jest/globals"
+import CPU from "../src/emulator/cpu"
+import Memory from "../src/emulator/memory"
+import { Opcodes } from "../src/emulator/opcodes"
 
 //
 // These tests validate that the `CPU` can fetch and execute instructions from `Memory`.

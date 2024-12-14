@@ -1,5 +1,5 @@
-import { test, expect, describe } from "bun:test"
-import { Interpreter, InterpreterGroupings, InterpreterType } from "../src/emulator/interpreter.ts"
+import { test, expect, describe } from "@jest/globals"
+import { Interpreter, InterpreterGroupings, InterpreterType } from "../src/emulator/interpreter"
 
 //
 // These tests validate that the `Interpreter` can interpret string inputs into instructions.
@@ -71,133 +71,133 @@ describe('Interpreter', () => {
       let groups = Interpreter.interpretLine("label: push a, b ;comment")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe("label")
-        expect(groups[InterpreterGroupings.Instruction]).toBe("push")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("a")
-        expect(groups[InterpreterGroupings.Operand2]).toBe("b")
+        expect(groups.label).toBe("label")
+        expect(groups.instruction).toBe("push")
+        expect(groups.operand1).toBe("a")
+        expect(groups.operand2).toBe("b")
         // TODO: handle comments
-        // expect(groups[InterpreterGroupings.Comment]).toBe("comment")
+        // expect(groups.comment).toBe("comment")
       }
     })
     test('should interpret line without a label.', () => {
       let groups = Interpreter.interpretLine("push a, b")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("push")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("a")
-        expect(groups[InterpreterGroupings.Operand2]).toBe("b")
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("push")
+        expect(groups.operand1).toBe("a")
+        expect(groups.operand2).toBe("b")
+        expect(groups.comment).toBe(undefined)
       }
     })
     test('should interpret line with a unary operation', () => {
       let groups = Interpreter.interpretLine("push a")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("push")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("a")
-        expect(groups[InterpreterGroupings.Operand2]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("push")
+        expect(groups.operand1).toBe("a")
+        expect(groups.operand2).toBe(undefined)
+        expect(groups.comment).toBe(undefined)
       }
     })
     test('should interpret line with an indirect unary operation', () => {
       let groups = Interpreter.interpretLine("push [a]")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("push")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("[a]")
-        expect(groups[InterpreterGroupings.Operand2]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("push")
+        expect(groups.operand1).toBe("[a]")
+        expect(groups.operand2).toBe(undefined)
+        expect(groups.comment).toBe(undefined)
       }
     })
     test('should interpret line with a binary operation', () => {
       let groups = Interpreter.interpretLine("push a, b")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("push")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("a")
-        expect(groups[InterpreterGroupings.Operand2]).toBe("b")
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("push")
+        expect(groups.operand1).toBe("a")
+        expect(groups.operand2).toBe("b")
+        expect(groups.comment).toBe(undefined)
       }
     })
     test('should interpret line with an indirect binary operation', () => {
       let groups = Interpreter.interpretLine("push [a], b")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("push")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("[a]")
-        expect(groups[InterpreterGroupings.Operand2]).toBe("b")
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("push")
+        expect(groups.operand1).toBe("[a]")
+        expect(groups.operand2).toBe("b")
+        expect(groups.comment).toBe(undefined)
       }
     })
     test('should interpret psuedo instructions', () => {
-      let groups = undefined
+      let groups
 
       groups = Interpreter.interpretLine("DB \"string\"")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("DB")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("\"string\"")
-        expect(groups[InterpreterGroupings.Operand2]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("DB")
+        expect(groups.operand1).toBe("\"string\"")
+        expect(groups.operand2).toBe(undefined)
+        expect(groups.comment).toBe(undefined)
       }
 
       groups = Interpreter.interpretLine("DB 'c'")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("DB")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("'c'")
-        expect(groups[InterpreterGroupings.Operand2]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("DB")
+        expect(groups.operand1).toBe("'c'")
+        expect(groups.operand2).toBe(undefined)
+        expect(groups.comment).toBe(undefined)
       }
 
       groups = Interpreter.interpretLine("DB 6")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("DB")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("6")
-        expect(groups[InterpreterGroupings.Operand2]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("DB")
+        expect(groups.operand1).toBe("6")
+        expect(groups.operand2).toBe(undefined)
+        expect(groups.comment).toBe(undefined)
       }
     })
     test('should interpret psuedo instructions', () => {
-      let groups = undefined
+      let groups
 
       groups = Interpreter.interpretLine("DB \"string\"")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("DB")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("\"string\"")
-        expect(groups[InterpreterGroupings.Operand2]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("DB")
+        expect(groups.operand1).toBe("\"string\"")
+        expect(groups.operand2).toBe(undefined)
+        expect(groups.comment).toBe(undefined)
       }
 
       groups = Interpreter.interpretLine("DB 'c'")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("DB")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("'c'")
-        expect(groups[InterpreterGroupings.Operand2]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("DB")
+        expect(groups.operand1).toBe("'c'")
+        expect(groups.operand2).toBe(undefined)
+        expect(groups.comment).toBe(undefined)
       }
 
       groups = Interpreter.interpretLine("DB 6")
       expect(groups).not.toBeNull()
       if (groups) {
-        expect(groups[InterpreterGroupings.Label]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Instruction]).toBe("DB")
-        expect(groups[InterpreterGroupings.Operand1]).toBe("6")
-        expect(groups[InterpreterGroupings.Operand2]).toBe(undefined)
-        expect(groups[InterpreterGroupings.Comment]).toBe(undefined)
+        expect(groups.label).toBe(undefined)
+        expect(groups.instruction).toBe("DB")
+        expect(groups.operand1).toBe("6")
+        expect(groups.operand2).toBe(undefined)
+        expect(groups.comment).toBe(undefined)
       }
     })
   })
@@ -240,32 +240,20 @@ describe('Interpreter', () => {
 
   describe('#parseRegister()', () => {
     test('should return proper register index.', () => {
-      let value = undefined
-
-      value = Interpreter.parseRegister('a')
-      expect(value).toBe(0)
-
-      value = Interpreter.parseRegister('b')
-      expect(value).toBe(1)
-
-      value = Interpreter.parseRegister('c')
-      expect(value).toBe(2)
-
-      value = Interpreter.parseRegister('d')
-      expect(value).toBe(3)
-
-      value = Interpreter.parseRegister('sp')
-      expect(value).toBe(4)
+      expect(Interpreter.parseRegister('a')).toBe(0)
+      expect(Interpreter.parseRegister('b')).toBe(1)
+      expect(Interpreter.parseRegister('c')).toBe(2)
+      expect(Interpreter.parseRegister('d')).toBe(3)
+      expect(Interpreter.parseRegister('sp')).toBe(4)
     })
     test('should return undefined for unknown register index.', () => {
-      let value = Interpreter.parseRegister('f')
-      expect(value).toBe(undefined)
+      expect(Interpreter.parseRegister('f')).toBe(undefined)
     })
   })
 
   describe('#getValue()', () => {
     test('should return proper <type, value> pair.', () => {
-      let value = undefined
+      let value
 
       value = Interpreter.getValue("[a]")
       expect(value!.type).toBe(InterpreterType.RegAddress)

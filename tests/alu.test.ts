@@ -1,5 +1,5 @@
-import { test, expect, describe } from "bun:test"
-import { ALU } from "../src/emulator/alu.ts"
+import { test, expect, describe } from "@jest/globals"
+import { ALU } from "../src/emulator/alu"
 
 //
 // These tests validate that the `ALU` can do arithmatic.

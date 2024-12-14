@@ -1,6 +1,6 @@
-import { ALU, ALUOperationFunction } from './alu.ts'
-import Memory from './memory.ts'
-import { Opcodes } from './opcodes.ts'
+import { ALU, ALUOperationFunction } from './alu'
+import Memory from './memory'
+import { Opcodes } from './opcodes'
 
 export default class CPU {
   public pc: number

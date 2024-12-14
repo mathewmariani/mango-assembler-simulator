@@ -1,15 +1,19 @@
-import { Opcodes } from './opcodes.ts'
-import { Interpreter, InterpreterGroupings } from './interpreter.ts'
-import { InstructionSet } from './instructions.ts'
+import { Opcodes } from './opcodes'
+import { Interpreter, InterpreterType, InterpreterValue } from './interpreter'
+import { InstructionSet } from './instructions'
 
 export default class Assembler {
-  public code: number[]
+  public code: any[]
+  public interpreted: InterpreterValue[]
+  public bytes: number[]
   public mapping: { [id: number] : number; }
   public labels: { [id: string] : number; }
   public errors: string[]
 
   constructor() {
     this.code = []
+    this.interpreted = []
+    this.bytes = []
     this.mapping = {}
     this.labels = {}
     this.errors = []
@@ -45,24 +49,17 @@ export default class Assembler {
     // first pass
     for (let i = 0, l = lines.length; i < l; ++i) {
       // interpret the current line
-      let match = Interpreter.interpretLine(lines[i])
+      let line = Interpreter.interpretLine(lines[i])
 
-      // check for other instructions
-      const label = match![InterpreterGroupings.Label]
-      const instruction = match![InterpreterGroupings.Instruction]
-      const operand1 = match![InterpreterGroupings.Operand1]
-      const operand2 = match![InterpreterGroupings.Operand2]
-      const comment = match![InterpreterGroupings.Comment]
-
-      if (label) {
-        this.addLabel(label)
+      if (line.label) {
+        this.addLabel(line.label)
       }
 
-      if (instruction) {
+      if (line.instruction) {
         // FIXME: clean this up
         let opcode = undefined
-        const keyword = instruction.toUpperCase()
-        const [p1, p2] = Interpreter.getArguments(InstructionSet[keyword], operand1, operand2)
+        const keyword = line.instruction.toUpperCase()
+        const [p1, p2] = Interpreter.getArguments(InstructionSet[keyword], line.operand1, line.operand2)
 
         // create mapping for breakpoints
         // if (instruction !== 'DB') {
@@ -75,12 +72,10 @@ export default class Assembler {
         case 'DB':
           // FIXME: this might cause some issues
           // InterpreterType.Number, InterpreterType.Char, InterpreterType.String
-          if (Interpreter.isNumber(p1)) {
-            this.code.push(p1.value)
-          } else if (Interpreter.isChar(p1)) {
+          if (Interpreter.isNumber(p1) || Interpreter.isChar(p1)) {
             this.code.push(p1.value)
           } else if (Interpreter.isString(p1)) {
-            for (let j = 0, k = p1.value.length; j < k; ++j) {
+            for (let j = 0, k = (String)(p1.value).length; j < k; ++j) {
               this.code.push(p1.value[j])
             }
           } else {
@@ -392,7 +387,7 @@ export default class Assembler {
           this.code.push(opcode, p1.value)
           break
         default:
-          throw new Error("Invalid instruction: " + instruction)
+          throw new Error("Invalid instruction: " + line.instruction)
         }
       }
     }

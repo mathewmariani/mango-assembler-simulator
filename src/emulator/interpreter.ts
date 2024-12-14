@@ -1,4 +1,5 @@
 import { InstructionType } from "./instructions";
+import { Opcodes } from './opcodes'
 
 export enum InterpreterGroupings {
   Label = 1,
@@ -15,6 +16,7 @@ export enum InterpreterType {
   Address = 4,
   Register = 5,
   RegAddress = 6,
+  Opcode = 7,
 };
 
 export type InterpreterValue = { type: InterpreterType, value: number | number[] | string } | undefined;
@@ -39,32 +41,322 @@ export class Interpreter {
   // FIXME: I dont like this giant regex
   static readonly regex: RegExp = /^\s*(?:([A-Za-z]\w*)[:])?\s*(?:(\w*))?\s*(?:(\[(?:\w+(?:[\+|-]\d+)?)\]|\".+?\"|\'.+?\'|[$A-Za-z0-9]\w*))?\s*(?:[,]\s*(\[(\w+((\+|-)\d+)?)\]|\".+?\"|\'.+?\'|[$A-Za-z0-9]\w*))?/
 
-  static isNumber(token: InterpreterValue) {
+  static isOpcode(token: InterpreterValue): boolean {
     return token?.type == InterpreterType.Number
   }
 
-  static isChar(token: InterpreterValue) {
+  static isNumber(token: InterpreterValue): boolean {
+    return token?.type == InterpreterType.Number
+  }
+
+  static isChar(token: InterpreterValue): boolean {
     return token?.type == InterpreterType.Char
   }
 
-  static isString(token: InterpreterValue) {
+  static isString(token: InterpreterValue): boolean {
     return token?.type == InterpreterType.String
   }
 
-  static isAddress(token: InterpreterValue) {
+  static isAddress(token: InterpreterValue): boolean {
     return token?.type == InterpreterType.Address
   }
 
-  static isRegister(token: InterpreterValue) {
+  static isRegister(token: InterpreterValue): boolean {
     return token?.type == InterpreterType.Register
   }
 
-  static isRegAddress(token: InterpreterValue) {
+  static isRegAddress(token: InterpreterValue): boolean {
     return token?.type == InterpreterType.RegAddress
   }
 
+  static parseInstruction(keyword: string, p1: any, p2: any) {
+    switch (keyword) {
+      // pseudo-instructions
+      // used to declare initialized data in the output file.
+      case 'DB':
+        // FIXME: this might cause some issues
+        // InterpreterType.Number, InterpreterType.Char, InterpreterType.String
+        // if (Interpreter.isNumber(p1) || Interpreter.isChar(p1)) {
+        //   return { type: InterpreterType.RegAddress, value: regaddress }
+        // } else if (Interpreter.isString(p1)) {
+        //   for (let j = 0, k = (String)(p1.value).length; j < k; ++j) {
+        //     this.code.push(p1.value[j])
+        //   }
+        // } else {
+        //   // FIXME: throw proper error
+        //   throw "Lorem Ipsum!"
+        // }
+
+        // break
+      // halt instructions
+      // FIXME: i dont like that halt is a non-opcode
+      case 'HLT':
+        return { type: InterpreterType.Opcode, value: Opcodes.NONE }
+      
+      // move instructions
+      case 'MOV':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.MOV_REG_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.MOV_ADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.MOV_REGADDR_TO_REG }
+        } else if (Interpreter.isAddress(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.MOV_REG_TO_ADDR }
+        } else if (Interpreter.isRegAddress(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.MOV_REG_TO_REGADDR }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.MOV_NUM_TO_REG }
+        } else if (Interpreter.isAddress(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.MOV_NUM_TO_ADDR }
+        } else if (Interpreter.isRegAddress(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.MOV_NUM_TO_REGADDR }
+        } else {
+          throw new Error("MOV does not support this operands")
+        }
+
+      // arithmatic instructions
+      // MULT
+      // DIV
+      case 'ADD':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.ADD_REG_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.ADD_ADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.ADD_REGADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.ADD_NUM_TO_REG }
+        } else {
+          throw new Error("ADD does not support this operands")
+        }
+
+      case 'SUBT':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SUBT_NUM_FROM_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SUBT_NUM_FROM_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SUBT_NUM_FROM_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SUBT_NUM_FROM_REG }
+        } else {
+          throw new Error("SUBT does not support this operands")
+        }
+
+      case 'INC':
+        if (Interpreter.isRegister(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.INC_REG }
+        } else {
+          throw "INC does not support this operand"
+        }
+
+      case 'DEC':
+        if (Interpreter.isRegister(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.DEC_REG }
+        } else {
+          throw "DEC does not support this operand"
+        }
+
+      // comparison instructions
+      case 'CMP':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.CMP_REG_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.CMP_ADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.CMP_REGADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.CMP_NUM_TO_REG }
+        } else {
+          throw new Error("CMP does not support this operands")
+        }
+
+      // jump instruction
+      case 'JMP':
+        if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JMP_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JMP_REGADDR }
+        } else {
+          throw new Error("JMP does not support this operand")
+        }
+
+      case 'JC':
+        if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JC_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JC_REGADDR }
+        } else {
+          throw new Error("JC does not support this operand")
+        }
+
+      case 'JNC':
+        if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JNC_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JNC_REGADDR }
+        } else {
+          throw new Error("JNC does not support this operand")
+        }
+
+      case 'JZ':
+        if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JZ_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JZ_REGADDR }
+        } else {
+          throw new Error("JZ does not support this operand")
+        }
+
+      case 'JNZ':
+        if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JNZ_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JNZ_REGADDR }
+        } else {
+          throw new Error("JNZ does not support this operand")
+        }
+
+      case 'JA':
+        if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JA_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JA_REGADDR }
+        } else {
+          throw new Error("JA does not support this operand")
+        }
+
+      case 'JNA':
+        if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JNA_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.JNA_REGADDR }
+        } else {
+          throw new Error("JNA does not support this operand")
+        }
+
+      // stack instructions
+      case 'PUSH':
+        if (Interpreter.isRegister(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.PUSH_REG }
+        } else if (Interpreter.isAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.PUSH_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.PUSH_REGADDR }
+        } else if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.PUSH_NUM }
+        } else {
+          throw new Error("PUSH does not support this operands")
+        }
+
+      case 'POP':
+        if (Interpreter.isRegister(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.POP_REG }
+        } else {
+          throw new Error("POP does not support this operands")
+        }
+
+      // subroutine instructions
+      case 'CALL':
+        if (Interpreter.isNumber(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.CALL_ADDR }
+        } else if (Interpreter.isRegAddress(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.CALL_REGADDR }
+        } else {
+          throw new Error("CALL does not support this operands")
+        }
+
+      case 'RET':
+        return { type: InterpreterType.Opcode, value: Opcodes.RET }
+
+      // binary instructions
+      case 'AND':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.AND_REG_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.AND_ADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.AND_REGADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.AND_NUM_TO_REG }
+        } else {
+          throw new Error("AND does not support this operands")
+        }
+    
+      case 'OR':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.OR_REG_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.OR_ADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.OR_REGADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.OR_NUM_TO_REG }
+        } else {
+          throw new Error("OR does not support this operands")
+        }
+
+      case 'XOR':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.XOR_REG_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.XOR_ADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.XOR_REGADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.XOR_NUM_TO_REG }
+        } else {
+          throw new Error("XOR does not support this operands")
+        }
+
+      case 'SHL':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SHL_REG_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SHL_ADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SHL_REGADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SHL_NUM_TO_REG }
+        } else {
+          throw new Error("SHL does not support this operands")
+        }
+
+      case 'SHR':
+        if (Interpreter.isRegister(p1) && Interpreter.isRegister(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SHR_REG_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SHR_ADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isRegAddress(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SHR_REGADDR_TO_REG }
+        } else if (Interpreter.isRegister(p1) && Interpreter.isNumber(p2)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.SHR_NUM_TO_REG }
+        } else {
+          throw new Error("SHR does not support this operands")
+        }
+
+      case 'NOT':
+        if (Interpreter.isRegister(p1)) {
+          return { type: InterpreterType.Opcode, value: Opcodes.NOT_REG }
+        } else {
+          throw new Error("NOT does not support this operands")
+        }
+
+      default:
+        throw new Error("Invalid instruction: " + keyword)
+    }
+  }
+
   static interpretLine(line: string) {
-    return this.regex.exec(line)
+    let match = this.regex.exec(line)
+    return {
+      label: match![InterpreterGroupings.Label],
+      instruction: match![InterpreterGroupings.Instruction],
+      operand1: match![InterpreterGroupings.Operand1],
+      operand2: match![InterpreterGroupings.Operand2],
+      comment: match![InterpreterGroupings.Comment],
+    }
   }
 
   static parseNumber(input: string) {
@@ -167,11 +459,11 @@ export class Interpreter {
         return { type: InterpreterType.Register, value: register }
       } else {
         let label = this.parseLabel(input)
-      if (label !== undefined) {
-        return { type: InterpreterType.Number, value: label }
-      } else {
-        let number = this.parseNumber(input) 
-        return { type: InterpreterType.Number, value: number }
+        if (label !== undefined) {
+          return { type: InterpreterType.Number, value: label }
+        } else {
+          let number = this.parseNumber(input) 
+          return { type: InterpreterType.Number, value: number }
         }
       }
     }
