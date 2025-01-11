@@ -1,9 +1,7 @@
 {
   "name": "mango-assembler-simulator",
   "scripts": {
-    "build": "tsc",
-    "prestart": "npm run build",
-    "start": "node .",
+    "build": "npx tsc",
     "test": "jest",
     "test:debug": "jest --runInBand"
   },
