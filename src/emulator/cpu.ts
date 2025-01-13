@@ -644,7 +644,7 @@ export default class CPU {
       this.fetch_addr_operand()
       this.pc = (this.carry)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JC_REGADDR:
       // register transfer language
@@ -659,7 +659,7 @@ export default class CPU {
       this.fetch_memory_from()
       this.pc = (this.carry)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JNC_ADDR:
       // register transfer language
@@ -671,7 +671,7 @@ export default class CPU {
       this.fetch_addr_operand()
       this.pc = (!this.carry)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JNC_REGADDR:
       // register transfer language
@@ -686,7 +686,7 @@ export default class CPU {
       this.fetch_memory_from()
       this.pc = (!this.carry)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JZ_ADDR:
       // register transfer language
@@ -698,7 +698,7 @@ export default class CPU {
       this.fetch_addr_operand()
       this.pc = (this.zero)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JZ_REGADDR:
       // register transfer language
@@ -713,7 +713,7 @@ export default class CPU {
       this.fetch_memory_from()
       this.pc = (this.zero)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JNZ_ADDR:
       // register transfer language
@@ -725,7 +725,7 @@ export default class CPU {
       this.fetch_addr_operand()
       this.pc = (!this.zero)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JNZ_REGADDR:
       // register transfer language
@@ -740,7 +740,7 @@ export default class CPU {
       this.fetch_memory_from()
       this.pc = (!this.zero)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JA_ADDR:
       // register transfer language
@@ -752,7 +752,7 @@ export default class CPU {
       this.fetch_addr_operand()
       this.pc = (!this.carry && !this.zero)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JA_REGADDR:
       // register transfer language
@@ -767,7 +767,7 @@ export default class CPU {
       this.fetch_memory_from()
       this.pc = (!this.carry && !this.zero)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JNA_ADDR:
       // register transfer language
@@ -779,7 +779,7 @@ export default class CPU {
       this.fetch_addr_operand()
       this.pc = (this.carry && this.zero)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
     case Opcodes.JNA_REGADDR:
       // register transfer language
@@ -794,7 +794,7 @@ export default class CPU {
       this.fetch_memory_from()
       this.pc = (this.carry && this.zero)
         ? this.mbr  
-        : this.pc++
+        : ++this.pc
       break
 
     // subroutine instructions

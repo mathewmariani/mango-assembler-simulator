@@ -20,10 +20,10 @@ describe('Programs', () => {
 
   // run cpu until a halt
   let execute = function() {
-    do {
+    while (!cpu.halt) {
       cpu.fetch()
       cpu.execute()
-    } while (!cpu.halt)
+    } 
   }
 
   // clear everything between tests
@@ -627,10 +627,9 @@ describe('Programs', () => {
       HLT`
 
     assemble(str)
-    cpu.carry = false
     execute()
 
-    expect(cpu.pc).toBe(0x5)
+    expect(cpu.pc).toBe(0x2)
   })
   test('should execute JNC_ADDR', () => {
     const str = `
@@ -650,7 +649,7 @@ describe('Programs', () => {
     assemble(str)
     execute()
 
-    expect(cpu.pc).toBe(0x5)
+    expect(cpu.pc).toBe(0x2)
   })
   test('should execute JNZ_ADDR', () => {
     const str = `

@@ -449,8 +449,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
       test('should execute JC_ADDR (z=true).', () => {
         memory.write(0x00, Opcodes.JC_ADDR)
@@ -473,8 +473,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
       test('should execute JC_REGADDR (c=true).', () => {
         memory.write(0x00, Opcodes.JC_REGADDR)
@@ -511,8 +511,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
       test('should execute JNC_REGADDR (c=false).', () => {
         memory.write(0x00, Opcodes.JNC_REGADDR)
@@ -537,8 +537,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
     })
 
@@ -551,8 +551,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
       test('should execute JZ_ADDR (z=true).', () => {
         memory.write(0x00, Opcodes.JZ_ADDR)
@@ -575,8 +575,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
       test('should execute JZ_REGADDR (z=true).', () => {
         memory.write(0x00, Opcodes.JZ_REGADDR)
@@ -613,8 +613,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
       test('should execute JNZ_REGADDR (z=false).', () => {
         memory.write(0x00, Opcodes.JNZ_REGADDR)
@@ -639,8 +639,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
     })
 
@@ -666,8 +666,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
       test('should execute JA_REGADDR (c=false, z=false).', () => {
         memory.write(0x00, Opcodes.JA_REGADDR)
@@ -694,8 +694,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
     })
 
@@ -709,8 +709,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
       test('should execute JNA_ADDR (c=true, z=true).', () => {
         memory.write(0x00, Opcodes.JNA_ADDR)
@@ -733,8 +733,8 @@ describe('CPU', () => {
         cpu.fetch()
         cpu.execute()
 
-        expect(cpu.pc).toBe(1)
-        expect(cpu.pc).not.toBe(5)
+        expect(cpu.pc).toBe(0x2)
+        expect(cpu.pc).not.toBe(0x5)
       })
     })
 
