@@ -1,3 +1,7 @@
+# visual studio project file
+.vscode/*
+!.vscode/launch.json
+
 # Dependency directories
 node_modules/
 
