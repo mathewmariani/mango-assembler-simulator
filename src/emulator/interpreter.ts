@@ -10,6 +10,7 @@ export enum InterpreterGroupings {
 };
 
 export enum InterpreterType {
+  None = 0,
   Number = 1,
   Char = 2,
   String = 3,
@@ -19,7 +20,7 @@ export enum InterpreterType {
   Opcode = 7,
 };
 
-export type InterpreterValue = { type: InterpreterType, value: number | number[] | string } | undefined;
+export type InterpreterValue = { type: InterpreterType, value: number | number[] | string | undefined };
 
 export class Interpreter {
   // regexes
@@ -470,8 +471,8 @@ export class Interpreter {
   }
   
   static getArguments(instruction: InstructionType, operand1: string | undefined, operand2: string | undefined): [InterpreterValue, InterpreterValue] {
-    let p1: InterpreterValue;
-    let p2: InterpreterValue;
+    let p1: InterpreterValue = { type: InterpreterType.None, value: 0 };
+    let p2: InterpreterValue = { type: InterpreterType.None, value: 0 };
     if (instruction !== undefined) {
       if (instruction.unary && !instruction.binary) {
         if (operand1 !== undefined && operand2 === undefined) {

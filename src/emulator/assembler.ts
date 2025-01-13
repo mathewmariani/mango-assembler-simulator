@@ -75,8 +75,9 @@ export default class Assembler {
           if (Interpreter.isNumber(p1) || Interpreter.isChar(p1)) {
             this.code.push(p1.value)
           } else if (Interpreter.isString(p1)) {
-            for (let j = 0, k = (String)(p1.value).length; j < k; ++j) {
-              this.code.push(p1.value[j])
+            const str = (p1.value as string);
+            for (let j = 0, k = str.length; j < k; ++j) {
+              this.code.push(str[j])
             }
           } else {
             // FIXME: throw proper error

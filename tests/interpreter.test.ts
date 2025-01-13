@@ -299,8 +299,8 @@ describe('Interpreter', () => {
       // FIXME: this will throw an errror, we dont want this error.
       const [p1, p2] = Interpreter.getArguments(instruction, op1, op2)
 
-      expect(p1).toEqual(undefined)
-      expect(p2).toEqual(undefined)
+      expect(p1).toEqual({ type: InterpreterType.None, value: 0 })
+      expect(p2).toEqual({ type: InterpreterType.None, value: 0 })
     })
     test('were just playing around right now too many arguments.', () => {
       const instruction = { unary: false, binary: false }
@@ -317,7 +317,7 @@ describe('Interpreter', () => {
       const [p1, p2] = Interpreter.getArguments(instruction, op1, op2)
 
       expect(p1).toEqual({ type: InterpreterType.Register, value: 0x0 })
-      expect(p2).toEqual(undefined)
+      expect(p2).toEqual({ type: InterpreterType.None, value: 0 })
     })
     test('should throw for unary instruction with extra arguments.', () => {
       const instruction = { unary: true, binary: false }
