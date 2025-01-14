@@ -5,6 +5,10 @@
     "test": "jest",
     "test:debug": "jest --runInBand"
   },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
   "dependencies": {
     "typescript": "^5.4.3"
   },
