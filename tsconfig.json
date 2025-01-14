@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es6",
+    "moduleResolution": "node",
     "rootDir": "./src/emulator",
     "outDir": "./website/assets/js",
     "strict": true
