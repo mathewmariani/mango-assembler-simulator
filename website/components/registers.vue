@@ -1,0 +1,60 @@
+
+<template>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>GPR</th>
+                <th>PC</th>
+                <th>SP</th>
+                <th>MAR</th>
+                <th>MBR</th>
+                <th>IR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ cpu.gpr.join(', ') }}</td>
+                <td>{{ cpu.pc }}</td>
+                <td>{{ cpu.sp }}</td>
+                <td>{{ cpu.mar }}</td>
+                <td>{{ cpu.mbr }}</td>
+                <td>{{ cpu.ir }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Carry</th>
+                <th>Zero</th>
+                <th>Overflow</th>
+                <th>Negative</th>
+                <th>Halt</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ cpu.status.toString(2).padStart(8, '0') }}</td>
+                <td>{{ cpu.carry ? 'True' : 'False' }}</td>
+                <td>{{ cpu.zero ? 'True' : 'False' }}</td>
+                <td>{{ cpu.overflow ? 'True' : 'False' }}</td>
+                <td>{{ cpu.negative ? 'True' : 'False' }}</td>
+                <td>{{ cpu.halt ? 'True' : 'False' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</template>
+    
+<script>
+    export default {
+        props: {
+            cpu: { type: Object, required: true },
+        },
+        methods: {
+            formatBase(value, length) {
+                return value.toString(16).padStart(length, '0').toUpperCase();
+            }
+        }
+    }
+</script>

@@ -1,4 +1,4 @@
-name: Test
+name: Build and Test
 
 on:
   push:
@@ -17,3 +17,7 @@ jobs:
 
       - name: Run Tests 🔧
         run: npm test
+
+      - name: Building Website 🔧
+        run: |
+          npm run build

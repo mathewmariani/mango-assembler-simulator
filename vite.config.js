@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'website')
+      '@': path.resolve(__dirname, 'build')
     }
   },
 })

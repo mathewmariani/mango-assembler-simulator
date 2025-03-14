@@ -1,6 +1,6 @@
 # Mango Assembler Simulator
 
-[![Build](/../../actions/workflows/main.yml/badge.svg)](/../../actions/workflows/main.yml)
+[![Build and Test](/../../actions/workflows/main.yml/badge.svg)](/../../actions/workflows/main.yml)
 
 A simulator with a simplified assembler syntax implemented in Typescript, using VueJS.
 
