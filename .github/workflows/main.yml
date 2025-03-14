@@ -20,4 +20,5 @@ jobs:
 
       - name: Building Website 🔧
         run: |
+          npm run build-emulator
           npm run build
