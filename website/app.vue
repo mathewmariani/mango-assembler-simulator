@@ -1,10 +1,10 @@
 <script setup>
-import EditorCompenent from './components/editor.vue'
-import InterfaceCompenent from './components/interface.vue'
-import MemoryCompenent from './components/memory.vue'
-import RegistersCompenent from './components/registers.vue'
+import EditorCompenent from './components/editor.vue';
+import InterfaceCompenent from './components/interface.vue';
+import MemoryCompenent from './components/memory.vue';
+import RegistersCompenent from './components/registers.vue';
 
-import Assembler from '@/assembler.js'
+import Assembler from '@/assembler.js';
 import CPU from '@/cpu.js';
 import Memory from '@/memory.js';
 
@@ -19,7 +19,6 @@ let machine = {
   loaded: false,
   running: false,
 };
-
 </script>
 
 <template>

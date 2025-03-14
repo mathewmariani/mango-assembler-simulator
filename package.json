@@ -1,12 +1,12 @@
 {
   "name": "mango-assembler-simulator",
   "scripts": {
-    "build-ts": "npx tsc",
-    "test": "jest",
-    "test:debug": "jest --runInBand",
     "dev": "vite",
     "preview": "vite preview",
-    "build": "vite build"
+    "build": "vite build",
+    "build-emulator": "npx tsc",
+    "test": "jest",
+    "test:debug": "jest --runInBand"
   },
   "jest": {
     "preset": "ts-jest",
