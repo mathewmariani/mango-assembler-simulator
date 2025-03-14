@@ -16,8 +16,9 @@
                             v-for="(value, colIndex) in row"
                             :key="colIndex"
                             :class="{
-                            'table-warning': (rowIndex * 16 + colIndex) === mar,
-                            'table-success': (rowIndex * 16 + colIndex) === pc
+                            'table-mar': (rowIndex * 16 + colIndex) === mar,
+                            'table-pc': (rowIndex * 16 + colIndex) === pc,
+                            'table-sp': (rowIndex * 16 + colIndex) === sp
                             }"
                         >
                             {{ toHex(value, 2) }}
@@ -35,6 +36,7 @@
       memory: { type: Array, required: true },
       pc: { type: Number, required: true },
       mar: { type: Number, required: true },
+      sp: { type: Number, required: true },
     },
     computed: {
       // Chunk the memory array into rows of 16 elements

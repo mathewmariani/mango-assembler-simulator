@@ -1,0 +1,14 @@
+.table-pc {
+    --bs-table-color: #000;
+    --bs-table-bg: #0abde3;
+}
+
+.table-mar {
+    --bs-table-color: #000;
+    --bs-table-bg: #5f27cd;
+}
+
+.table-sp {
+    --bs-table-color: #000;
+    --bs-table-bg: #ff9f43;
+}

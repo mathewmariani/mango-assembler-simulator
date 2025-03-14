@@ -1,20 +1,20 @@
 
 <template>
     <table class="table table-sm table-bordered table-striped">
-        <thead>
+        <thead class="text-center">
             <tr>
                 <th>GPR[0]</th>
                 <th>GPR[1]</th>
                 <th>GPR[2]</th>
                 <th>GPR[3]</th>
-                <th>PC</th>
-                <th>SP</th>
-                <th>MAR</th>
+                <th class="table-pc">PC</th>
+                <th class="table-sp">SP</th>
+                <th class="table-mar">MAR</th>
                 <th>MBR</th>
                 <th>IR</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center">
             <tr>
                 <td>{{ cpu.gpr[0] }}</td>
                 <td>{{ cpu.gpr[1] }}</td>
@@ -29,7 +29,7 @@
         </tbody>
     </table>
     <table class="table table-sm table-bordered table-striped">
-        <thead>
+        <thead class="text-center">
             <tr>
                 <th>Status</th>
                 <th>Carry</th>
@@ -39,7 +39,7 @@
                 <th>Halt</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-center">
             <tr>
                 <td>{{ cpu.status.toString(2).padStart(8, '0') }}</td>
                 <td>{{ cpu.carry ? 'True' : 'False' }}</td>

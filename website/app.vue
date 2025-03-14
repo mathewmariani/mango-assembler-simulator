@@ -3,6 +3,7 @@
     <InterfaceCompenent
       v-bind:machine="machine"
       @assemble="assemble"
+      @reset="reset"
       @stop="stop"
       @run="run"
       @step="step"
@@ -14,6 +15,7 @@
       v-bind:memory="memory.data"
       v-bind:pc="cpu.pc"
       v-bind:mar="cpu.mar"
+      v-bind:sp="cpu.sp"
     ></MemoryCompenent>
   </main>
 </template>
@@ -54,18 +56,23 @@
           this.memory.write(i, b);
         });
       },
+      reset() {
+        this.assembler.reset()
+        this.memory.reset()
+        this.cpu.reset()
+      },
       stop() {
-        console.log("stop");
+        this.cpu.reset()
       },
       run() {
         console.log("run");
       },
       step() {
-        console.log("step");
+        this.cpu.fetch()
+        this.cpu.execute()
       }
     }
   };
 </script>
 
-<style scoped>
-</style>
+<style src="./assets/global.css"></style>

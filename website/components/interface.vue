@@ -2,23 +2,17 @@
   <ul class="list-group list-group-flush">
     <li class="list-group-item">
       <div class="btn-toolbar" role="toolbar">
-        <div class="btn-group mr-2" role="group">
-          <button @click="assemble" class="btn btn-primary btn-sm" :disabled="machine.running">
+        <div class="btn-group me-2" role="group">
+          <button @click="assemble" class="btn btn-primary btn-sm">
             assemble
           </button>
-          <button @click="reset" class="btn btn-primary btn-sm" :disabled="!machine.assembled || machine.running">
+          <button @click="reset" class="btn btn-primary btn-sm">
             reset
           </button>
         </div>
         
-        <div class="btn-group mr-2" role="group">
-          <button @click="stop" class="btn btn-primary btn-sm" :disabled="!machine.running">
-            stop
-          </button>
-          <button @click="run" class="btn btn-primary btn-sm" :disabled="!machine.assembled || machine.halted || machine.interrupted">
-            run
-          </button>
-          <button @click="step" class="btn btn-primary btn-sm" :disabled="!machine.assembled || machine.halted || machine.interrupted">
+        <div class="btn-group me-2" role="group">
+          <button @click="step" class="btn btn-primary btn-sm">
             step
           </button>
         </div>
@@ -33,7 +27,7 @@
     props: {
       machine: { type: Object, required: true },
     },
-    emits: ['assemble', 'stop', 'run', 'step'],
+    emits: ['assemble', 'reset', 'stop', 'run', 'step'],
     data: () => ({
       editor: null,
     }),
