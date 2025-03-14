@@ -1,6 +1,6 @@
 
 <template>
-    <table class="table table-bordered table-striped">
+    <table class="table table-sm table-bordered table-striped">
         <thead>
             <tr>
                 <th>GPR</th>
@@ -22,7 +22,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered table-striped">
+    <table class="table table-sm table-bordered table-striped">
         <thead>
             <tr>
                 <th>Status</th>
@@ -50,11 +50,6 @@
     export default {
         props: {
             cpu: { type: Object, required: true },
-        },
-        methods: {
-            formatBase(value, length) {
-                return value.toString(16).padStart(length, '0').toUpperCase();
-            }
         }
     }
 </script>

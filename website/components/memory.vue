@@ -29,31 +29,31 @@
     </div>
 </template>
   
-  <script>
-    export default {
-      props: {
-        memory: Array,
-        pc: Number,
-        mar: Number
-      },
-      computed: {
-        // Chunk the memory array into rows of 16 elements
-        chunkedMemory() {
-          let chunked = [];
-          for (let i = 0; i < this.memory.length; i += 16) {
-            chunked.push(this.memory.slice(i, i + 16));
-          }
-          return chunked;
+<script>
+  export default {
+    props: {
+      memory: { type: Uint8Array, required: true },
+      pc: { type: Number, required: true },
+      mar: { type: Number, required: true },
+    },
+    computed: {
+      // Chunk the memory array into rows of 16 elements
+      chunkedMemory() {
+        let chunked = [];
+        for (let i = 0; i < this.memory.length; i += 16) {
+          chunked.push(this.memory.slice(i, i + 16));
         }
-      },
-      methods: {
-        toHex(value, fixed) {
-          let val = Number(value).toString(16).toUpperCase();
-          while (val.length < fixed) {
-            val = '0' + val;
-          }
-          return val;
-        }
+        return chunked;
       }
-    };
-  </script>
+    },
+    methods: {
+      toHex(value, fixed) {
+        let val = Number(value).toString(16).toUpperCase();
+        while (val.length < fixed) {
+          val = '0' + val;
+        }
+        return val;
+      }
+    }
+  };
+</script>
