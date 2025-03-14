@@ -3,7 +3,7 @@
     <li class="list-group-item">
       <div class="btn-toolbar" role="toolbar">
         <div class="btn-group mr-2" role="group">
-          <button @click="machine.assemble" class="btn btn-primary" :disabled="machine.running">
+          <button @click="assemble" class="btn btn-primary" :disabled="machine.running">
             assemble
           </button>
           <button @click="machine.reset" class="btn btn-primary" :disabled="!machine.assembled || machine.running">
@@ -25,12 +25,38 @@
       </div>
     </li>
   </ul>
+  <div id="editor" class="border"></div>
 </template>
 
 <script>
   export default {
     props: {
       machine: { type: Object, required: true },
-    }
+    },
+    data: () => ({
+      editor: null,
+    }),
+    mounted() {
+      this.editor = window.ace.edit("editor");
+      this.editor.setOption("firstLineNumber", 1);
+      this.editor.setHighlightActiveLine(true);
+      this.editor.setValue("# Hello, World !", 1);
+      this.editor.setTheme("ace/theme/tomorrow_night");
+    },
+    methods: {
+      assemble() {
+        const str = this.editor ? this.editor.getValue() : '';
+        this.machine.assemble(str);
+      }
+    }    
   };
 </script>
+
+<style scoped>
+  #editor {
+    display: block;
+    height: 260px;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+</style>

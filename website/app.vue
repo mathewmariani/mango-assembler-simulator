@@ -1,22 +1,8 @@
-<script setup>
-import { reactive } from 'vue';
-
-import EditorCompenent from './components/editor.vue';
-import InterfaceCompenent from './components/interface.vue';
-import MemoryCompenent from './components/memory.vue';
-import RegistersCompenent from './components/registers.vue';
-
-import Machine from '@/machine.js';
-let machine = reactive(new Machine());
-</script>
-
 <template>
   <main>
     <InterfaceCompenent
       v-bind:machine="machine"
     ></InterfaceCompenent>
-    <EditorCompenent
-    ></EditorCompenent>
     <RegistersCompenent
       v-bind:cpu="machine.cpu"
     ></RegistersCompenent>
@@ -27,6 +13,23 @@ let machine = reactive(new Machine());
     ></MemoryCompenent>
   </main>
 </template>
+
+<script>
+  import { reactive } from 'vue';
+
+  import InterfaceCompenent from './components/interface.vue';
+  import MemoryCompenent from './components/memory.vue';
+  import RegistersCompenent from './components/registers.vue';
+  import Machine from '@/machine.js';
+
+  export default {
+    components: { InterfaceCompenent, MemoryCompenent, RegistersCompenent },
+    setup() {
+      let machine = reactive(new Machine());
+      return { machine };
+    }
+  };
+</script>
 
 <style scoped>
 </style>

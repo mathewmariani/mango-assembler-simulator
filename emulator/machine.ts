@@ -37,7 +37,7 @@ export default class Machine {
   }
 
   assemble(src: string) {
-    console.log("assemble")
+    console.log("assemble: " + src)
   }
 
   stop() {
