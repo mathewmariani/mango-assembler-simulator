@@ -32,7 +32,7 @@
 <script>
   export default {
     props: {
-      memory: { type: Uint8Array, required: true },
+      memory: { type: Array, required: true },
       pc: { type: Number, required: true },
       mar: { type: Number, required: true },
     },

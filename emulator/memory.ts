@@ -1,5 +1,5 @@
 export default class Memory {
-  private data: Uint8Array;
+  private data: Array<number>;
 
   private check_range(addr: number, len: number) { 
     if (addr < 0 || addr >= len) {
@@ -8,7 +8,7 @@ export default class Memory {
   }
 
   constructor() {
-    this.data = new Uint8Array(256)
+    this.data = new Array(256)
     this.reset()
   }
 

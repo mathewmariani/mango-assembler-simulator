@@ -3,22 +3,22 @@
     <li class="list-group-item">
       <div class="btn-toolbar" role="toolbar">
         <div class="btn-group mr-2" role="group">
-          <button @click="assemble" class="btn btn-primary" :disabled="machine.running">
+          <button @click="assemble" class="btn btn-primary btn-sm" :disabled="machine.running">
             assemble
           </button>
-          <button @click="machine.reset" class="btn btn-primary" :disabled="!machine.assembled || machine.running">
+          <button @click="reset" class="btn btn-primary btn-sm" :disabled="!machine.assembled || machine.running">
             reset
           </button>
         </div>
         
         <div class="btn-group mr-2" role="group">
-          <button @click="machine.stop" class="btn btn-primary" :disabled="!machine.running">
+          <button @click="stop" class="btn btn-primary btn-sm" :disabled="!machine.running">
             stop
           </button>
-          <button @click="machine.run" class="btn btn-primary" :disabled="!machine.assembled || machine.halted || machine.interrupted">
+          <button @click="run" class="btn btn-primary btn-sm" :disabled="!machine.assembled || machine.halted || machine.interrupted">
             run
           </button>
-          <button @click="machine.step" class="btn btn-primary" :disabled="!machine.assembled || machine.halted || machine.interrupted">
+          <button @click="step" class="btn btn-primary btn-sm" :disabled="!machine.assembled || machine.halted || machine.interrupted">
             step
           </button>
         </div>
@@ -33,6 +33,7 @@
     props: {
       machine: { type: Object, required: true },
     },
+    emits: ['assemble', 'stop', 'run', 'step'],
     data: () => ({
       editor: null,
     }),
@@ -56,11 +57,13 @@
     },
     methods: {
       assemble() {
-        const str = this.editor ? this.editor.getValue() : '';
-        this.machine.assemble(str);
-        this.$forceUpdate();
-      }
-
+        const src = this.editor ? this.editor.getValue() : '';
+        this.$emit('assemble', src);
+      },
+      reset() { this.$emit('reset'); },
+      stop() { this.$emit('stop'); },
+      run() { this.$emit('run'); },
+      step() { this.$emit('step'); }
     }    
   };
 </script>

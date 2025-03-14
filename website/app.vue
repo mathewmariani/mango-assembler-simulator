@@ -2,14 +2,18 @@
   <main>
     <InterfaceCompenent
       v-bind:machine="machine"
+      @assemble="assemble"
+      @stop="stop"
+      @run="run"
+      @step="step"
     ></InterfaceCompenent>
     <RegistersCompenent
-      v-bind:cpu="machine.cpu"
+      v-bind:cpu="cpu"
     ></RegistersCompenent>
     <MemoryCompenent
-      v-bind:memory="machine.memory.data"
-      v-bind:pc="machine.cpu.pc"
-      v-bind:mar="machine.cpu.mar"
+      v-bind:memory="memory.data"
+      v-bind:pc="cpu.pc"
+      v-bind:mar="cpu.mar"
     ></MemoryCompenent>
   </main>
 </template>
@@ -20,13 +24,45 @@
   import InterfaceCompenent from './components/interface.vue';
   import MemoryCompenent from './components/memory.vue';
   import RegistersCompenent from './components/registers.vue';
-  import Machine from '@/machine.js';
+  
+  import Assembler from '@/assembler.js';
+  import CPU from '@/cpu.js';
+  import Memory from '@/memory.js';
+  
 
   export default {
     components: { InterfaceCompenent, MemoryCompenent, RegistersCompenent },
     setup() {
-      let machine = reactive(new Machine());
-      return { machine };
+      let memory = reactive(new Memory());
+      let cpu = reactive(new CPU(memory));
+      let assembler = new Assembler();
+
+      let machine = {
+        assembled: false,
+        halted: false,
+        interrupted: false,
+        loaded: false,
+        running: false,
+      };
+
+      return { assembler, cpu, machine, memory };
+    },
+    methods: {
+      assemble(src) {
+        this.assembler.assemble(src);
+        this.assembler.code.forEach((b, i) => {
+          this.memory.write(i, b);
+        });
+      },
+      stop() {
+        console.log("stop");
+      },
+      run() {
+        console.log("run");
+      },
+      step() {
+        console.log("step");
+      }
     }
   };
 </script>
