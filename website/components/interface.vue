@@ -37,17 +37,30 @@
       editor: null,
     }),
     mounted() {
+      const str = `
+        # count to 10
+        MOV A, 0xA
+        CALL loop
+        HLT
+        loop:
+        DEC A
+        CMP A, 0x0
+        JNZ loop
+        RET`
+
       this.editor = window.ace.edit("editor");
       this.editor.setOption("firstLineNumber", 1);
       this.editor.setHighlightActiveLine(true);
-      this.editor.setValue("# Hello, World !", 1);
+      this.editor.setValue(str, 1);
       this.editor.setTheme("ace/theme/tomorrow_night");
     },
     methods: {
       assemble() {
         const str = this.editor ? this.editor.getValue() : '';
         this.machine.assemble(str);
+        this.$forceUpdate();
       }
+
     }    
   };
 </script>

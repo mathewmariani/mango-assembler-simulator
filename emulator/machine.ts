@@ -37,7 +37,11 @@ export default class Machine {
   }
 
   assemble(src: string) {
-    console.log("assemble: " + src)
+    this.assembler.assemble(src)
+    this.assembler.code.forEach((b, i) => {
+      console.log(i, b)
+      this.memory.write(i, b)
+    })
   }
 
   stop() {

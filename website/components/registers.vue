@@ -3,7 +3,10 @@
     <table class="table table-sm table-bordered table-striped">
         <thead>
             <tr>
-                <th>GPR</th>
+                <th>GPR[0]</th>
+                <th>GPR[1]</th>
+                <th>GPR[2]</th>
+                <th>GPR[3]</th>
                 <th>PC</th>
                 <th>SP</th>
                 <th>MAR</th>
@@ -13,7 +16,10 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ cpu.gpr.join(', ') }}</td>
+                <td>{{ cpu.gpr[0] }}</td>
+                <td>{{ cpu.gpr[1] }}</td>
+                <td>{{ cpu.gpr[2] }}</td>
+                <td>{{ cpu.gpr[3] }}</td>
                 <td>{{ cpu.pc }}</td>
                 <td>{{ cpu.sp }}</td>
                 <td>{{ cpu.mar }}</td>

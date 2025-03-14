@@ -9,11 +9,11 @@ export default class Memory {
 
   constructor() {
     this.data = new Uint8Array(256)
-    this.data.fill(0x00)
+    this.reset()
   }
 
   reset() {
-    this.data.forEach((e, i, a) => a[i] = 0x00)
+    this.data.fill(0x00)
   }
 
   read(addr: number) {

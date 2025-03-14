@@ -3,33 +3,44 @@ import Memory from './memory'
 import { Opcodes } from './opcodes'
 
 export default class CPU {
-  public pc: number
-  public sp: number
-  public mar: number
-  public mbr: number
-  public ir: number
-
-  public gpr: Uint8Array
-
-  public status: number
-  public zero: boolean
-  public carry: boolean
-  public overflow: boolean
-  public negative: boolean
-  public halt: boolean
-
-  public memory: Memory
-
   // constants
   public readonly maxSP: number = 231;
+
+  public pc: number = 0
+  public sp: number = 0
+  public mar: number = 0
+  public mbr: number = 0
+  public ir: number = 0
+
+  public gpr: Uint8Array = new Uint8Array(4)
+
+  public status: number = 0
+  public zero: boolean = false
+  public carry: boolean = false
+  public overflow: boolean = false
+  public negative: boolean = false
+  public halt: boolean = false
+
+  public memory: Memory
 
   constructor(ram: Memory) {
     // reference to memory
     this.memory = ram
 
+    this.reset()
+  }
+
+  settle() {
+    console.log("[STUBBED] cpu::settle()")
+  }
+
+  reset() {
     // general-purpose registers
     // can store both data and addresses.
-    this.gpr = new Uint8Array(4)
+    this.gpr[0x00] = 0x00
+    this.gpr[0x01] = 0x00
+    this.gpr[0x02] = 0x00
+    this.gpr[0x03] = 0x00
 
     // special-purpose registers used to hold program state.
     this.pc = 0
@@ -68,35 +79,6 @@ export default class CPU {
     this.negative = false
 
     // indicates that the cpu has halted.
-    this.halt = false
-  }
-
-  settle() {
-    console.log("[STUBBED] cpu::settle()")
-  }
-
-  reset() {
-    // general purpose registers
-    this.gpr[0] = 0x00
-    this.gpr[1] = 0x00
-    this.gpr[2] = 0x00
-    this.gpr[3] = 0x00
-
-    // special purpose registers
-    this.pc = 0x0
-    this.sp = this.maxSP
-
-    // memory registers
-    this.mar = 0x00
-    this.mbr = 0x00
-    this.ir = 0x00
-
-    // status registers
-    this.status = 0x00
-    this.zero = false
-    this.carry = false
-    this.overflow = false
-    this.negative = false
     this.halt = false
   }
 
