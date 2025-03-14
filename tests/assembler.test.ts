@@ -1,5 +1,5 @@
 import { test, expect, describe, beforeEach } from "@jest/globals"
-import Assembler from "../src/emulator/assembler"
+import Assembler from "../emulator/assembler"
 
 //
 // These tests validate that the `Assembler` can parse input into code.

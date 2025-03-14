@@ -1,7 +1,7 @@
 import { test, expect, describe, beforeEach } from "@jest/globals"
-import CPU from "../src/emulator/cpu"
-import Memory from "../src/emulator/memory"
-import { Opcodes } from "../src/emulator/opcodes"
+import CPU from "../emulator/cpu"
+import Memory from "../emulator/memory"
+import { Opcodes } from "../emulator/opcodes"
 
 //
 // These tests validate that the `CPU` can fetch and execute instructions from `Memory`.

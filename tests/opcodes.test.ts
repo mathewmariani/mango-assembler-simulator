@@ -1,5 +1,5 @@
 import { test, expect, describe } from "@jest/globals"
-import { Opcodes } from "../src/emulator/opcodes"
+import { Opcodes } from "../emulator/opcodes"
 
 //
 // These tests assure that the `Opcodes` haven't been changed.

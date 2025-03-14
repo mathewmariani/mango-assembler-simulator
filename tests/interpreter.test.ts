@@ -1,5 +1,5 @@
 import { test, expect, describe } from "@jest/globals"
-import { Interpreter, InterpreterGroupings, InterpreterType } from "../src/emulator/interpreter"
+import { Interpreter, InterpreterGroupings, InterpreterType } from "../emulator/interpreter"
 
 //
 // These tests validate that the `Interpreter` can interpret string inputs into instructions.

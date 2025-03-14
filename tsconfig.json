@@ -3,9 +3,9 @@
     "target": "es6",
     "module": "es6",
     "moduleResolution": "node",
-    "rootDir": "./src/emulator",
-    "outDir": "./website/assets/js",
+    "rootDir": "./emulator",
+    "outDir": "./build",
     "strict": true
   },
-  "include": ["src/emulator/**/*"]
+  "include": ["emulator/**/*.ts"]
 }

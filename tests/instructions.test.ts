@@ -1,6 +1,6 @@
 import { test, expect, describe, beforeEach } from "@jest/globals"
-import Assembler from "../src/emulator/assembler"
-import { Opcodes } from "../src/emulator/opcodes"
+import Assembler from "../emulator/assembler"
+import { Opcodes } from "../emulator/opcodes"
 
 //
 // These tests validate that the `Assembler` can assemble instructions into bytecode.
