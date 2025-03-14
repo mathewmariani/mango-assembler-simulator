@@ -6,7 +6,8 @@
 node_modules/
 
 # Build outputs
-website/
+dist/
+build/
 
 # macOS
 .DS_Store
